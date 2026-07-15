@@ -1,7 +1,7 @@
 {
   "meta": { "city": "Берлин", "country": "Германия", "dates": "2026-07-16 – 2026-07-17", "language": "ru", "party": "пара", "pace": "насыщенный", "generatedOn": "2026-07-15" },
   "i18n": {
-    "tripPlan": "План поездки", "askClaude": "Спросить Claude", "copied": "Скопировано",
+    "tripPlan": "План поездки", "askClaude": "Спросить ИИ", "copied": "Скопировано",
     "copyManually": "Скопируйте вручную:", "alternative": "альтернатива", "min": "мин",
     "fullDayRoute": "Весь маршрут дня в Google Maps", "transport": "Транспорт",
     "tickets": "Билеты", "apps": "Приложения", "verified": "проверено",

@@ -24,8 +24,14 @@ main{display:grid;grid-template-columns:minmax(340px,44%) 1fr;height:calc(100vh 
 .num{display:inline-flex;width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;align-items:center;justify-content:center;font-size:12px;margin-right:6px}
 .factline{color:var(--muted);font-size:13px;margin:4px 0}
 .links a{margin-right:10px;font-size:13px;color:var(--accent)}
-.ask{margin-top:8px;font-size:13px;display:flex;gap:8px;align-items:flex-start}
-.ask button{flex:none;cursor:pointer}
+.ask{margin-top:8px;font-size:13px;position:relative}
+.ask-toggle{cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--fg);border-radius:14px;padding:5px 12px;font-size:13px}
+.ask-toggle:hover{border-color:var(--accent)}
+.ask-menu{position:absolute;z-index:5;margin-top:4px;background:var(--bg);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.18);overflow:hidden;min-width:150px}
+.ask-menu[hidden]{display:none}
+.ask-bot{display:block;width:100%;text-align:left;padding:8px 14px;border:0;background:none;color:var(--fg);cursor:pointer;font-size:13px}
+.ask-bot:hover{background:var(--card)}
+.ask .factline{margin-top:6px}
 .transit{color:var(--muted);font-size:13px;margin:0 0 10px 10px;border-left:2px dotted var(--muted);padding-left:10px}
 details.alt{margin-top:8px}
 details.alt summary{cursor:pointer;font-size:13px;color:var(--accent)}
@@ -49,7 +55,7 @@ footer{border-top:1px solid var(--border);padding:4px 20px 12px;display:grid;gri
 const TRIP_DATA = {
   "meta": { "city": "Берлин", "country": "Германия", "dates": "2026-07-16 – 2026-07-17", "language": "ru", "party": "пара", "pace": "насыщенный", "generatedOn": "2026-07-15" },
   "i18n": {
-    "tripPlan": "План поездки", "askClaude": "Спросить Claude", "copied": "Скопировано",
+    "tripPlan": "План поездки", "askClaude": "Спросить ИИ", "copied": "Скопировано",
     "copyManually": "Скопируйте вручную:", "alternative": "альтернатива", "min": "мин",
     "fullDayRoute": "Весь маршрут дня в Google Maps", "transport": "Транспорт",
     "tickets": "Билеты", "apps": "Приложения", "verified": "проверено",
@@ -198,7 +204,9 @@ function poiCard(it,n,id){
   return '<div class="card" data-mid="'+id+'"><h3><span class="num">'+n+'</span>'+esc(it.name)+'</h3>'
     +'<div class="factline">'+[it.duration,it.price,it.hours].filter(Boolean).map(esc).join(' · ')+'</div>'
     +'<div>'+esc(it.summary||'')+'</div><div class="links">'+linkHtml+'</div>'
-    +(it.askPrompt?'<div class="ask"><button data-copy="'+esc(it.askPrompt)+'">⎘ '+esc(t('askClaude'))+'</button><span class="factline">'+esc(it.askPrompt)+'</span></div>':'')
+    +(it.askPrompt?'<div class="ask" data-prompt="'+esc(it.askPrompt)+'"><button type="button" class="ask-toggle">🤖 <span class="ask-toggle-label">'+esc(t('askClaude'))+'</span></button>'
+      +'<div class="ask-menu" hidden><button type="button" class="ask-bot" data-bot="claude">Claude</button><button type="button" class="ask-bot" data-bot="chatgpt">ChatGPT</button><button type="button" class="ask-bot" data-bot="gemini">Gemini</button><button type="button" class="ask-bot" data-bot="grok">Grok (xAI)</button><button type="button" class="ask-bot" data-bot="deepseek">DeepSeek</button></div>'
+      +'<div class="factline">'+esc(it.askPrompt)+'</div></div>':'')
     +alts+'</div>';
 }
 function mealCard(it){
@@ -221,12 +229,34 @@ function show(di){
   map.fitBounds(b.pad(0.2));
 }
 D.days.forEach((d,i)=>{const b=document.createElement('button');b.textContent=d.label;b.onclick=()=>show(i);tabs.appendChild(b)});
+const BOT_URLS={
+  claude:p=>'https://claude.ai/new?q='+encodeURIComponent(p),
+  chatgpt:p=>'https://chatgpt.com/?q='+encodeURIComponent(p),
+  gemini:p=>'https://gemini.google.com/app?q='+encodeURIComponent(p),
+  grok:p=>'https://grok.com/?q='+encodeURIComponent(p),
+  deepseek:()=>'https://chat.deepseek.com/'
+};
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.ask'))document.querySelectorAll('.ask-menu').forEach(m=>m.hidden=true);
+});
 itin.addEventListener('click',e=>{
-  const btn=e.target.closest('button[data-copy]');
-  if(btn){
-    if(navigator.clipboard)navigator.clipboard.writeText(btn.dataset.copy);
-    else window.prompt(t('copyManually'),btn.dataset.copy);
-    btn.textContent='✓ '+t('copied');setTimeout(()=>btn.textContent='⎘ '+t('askClaude'),1500);return;
+  const toggle=e.target.closest('.ask-toggle');
+  if(toggle){
+    const menu=toggle.nextElementSibling,wasHidden=menu.hidden;
+    document.querySelectorAll('.ask-menu').forEach(m=>m.hidden=true);
+    menu.hidden=!wasHidden;
+    return;
+  }
+  const botBtn=e.target.closest('.ask-bot');
+  if(botBtn){
+    const wrap=botBtn.closest('.ask'),prompt=wrap.dataset.prompt;
+    if(navigator.clipboard)navigator.clipboard.writeText(prompt);
+    const build=BOT_URLS[botBtn.dataset.bot];
+    if(build)window.open(build(prompt),'_blank','noopener');
+    wrap.querySelector('.ask-menu').hidden=true;
+    const label=wrap.querySelector('.ask-toggle-label'),orig=label.textContent;
+    label.textContent='✓ '+t('copied');setTimeout(()=>label.textContent=orig,1500);
+    return;
   }
   const alt=e.target.closest('details.alt'),card=e.target.closest('[data-mid]');
   const mid=alt?alt.dataset.mid:card&&card.dataset.mid;
