@@ -8,7 +8,8 @@
     "unverified": "не проверено — уточните", "onYourPhone": "Взять с собой в телефон",
     "mymapsStep1": "Откройте mymaps.google.com и создайте новую карту",
     "mymapsStep2": "Импортируйте файл", "mymapsStep3": "Карта появится в приложении Google Maps",
-    "breakfast": "Завтрак", "lunch": "Обед", "dinner": "Ужин", "readMore": "Подробнее"
+    "breakfast": "Завтрак", "lunch": "Обед", "dinner": "Ужин", "readMore": "Подробнее",
+    "notIncluded": "Не вошло в маршрут"
   },
   "transport": {
     "summary": "Фридрихсхайн хорошо связан с центром: 15–20 минут на метро/S-Bahn до Митте. Машина паркуется один раз у дома и не трогается до отъезда — весь маршрут на общественном транспорте.",
@@ -132,6 +133,20 @@
           "links": { "wikipedia": "https://ru.wikipedia.org/wiki/Потсдамская_площадь" },
           "askPrompt": "Чем интересна современная архитектура Potsdamer Platz и что там было во времена Берлинской стены?" },
         { "type": "transit", "mode": "U-Bahn/трамвай", "from": "Potsdamer Platz", "to": "Rosenfelder Straße", "minutes": 30, "note": "с пересадкой; выбирайте маршрут в приложении BVG" }
+      ],
+      "skipped": [
+        { "name": "Q-Park Bebelplatz (подземный паркинг)", "reason": "Не нужен: машина паркуется один раз у дома на Rosenfelder Straße и не используется до отъезда" },
+        { "name": "Straße des 17. Juni (уличная парковка)", "reason": "Та же причина — парковка в центре не нужна, машина стоит у дома весь визит" },
+        { "name": "Volkspark Friedrichshain (детская зона с Märchenbrunnen)", "reason": "Пункт из раздела «где оставить детей» в вашем документе — не актуально для поездки вдвоём без детей" },
+        { "name": "Tiergarten / Café am Neuen See (детская зона)", "reason": "Та же причина — рассчитано на семьи с детьми" },
+        { "name": "Vapiano (Potsdamer Platz)", "reason": "Сетевой итальянский фасткэжуал для больших семей — не «культовое берлинское», а день 1 и так уже очень плотный" },
+        { "name": "L'Osteria (Bikini Berlin)", "reason": "Сетевая пиццерия для больших компаний, в City West — далеко от маршрута дня 1" },
+        { "name": "Mensa Nord (Humboldt-Universität)", "reason": "Похожая идея на уже добавленную Kantine im Roten Rathaus — решили не дублировать нишу «столовая для своих»" },
+        { "name": "Hofbräu Wirtshaus Berlin", "reason": "Мюнхенский пивной формат, а не берлинский — шумно, туристично, не «культовое место»" },
+        { "name": "Dolores", "reason": "Калифорнийско-мексиканский стритфуд — вкусно, но не специфично для Берлина" },
+        { "name": "Risa Chicken (Torstraße)", "reason": "Популярна у местных, но в стороне от маршрута дня 1 и не «знаковая» точка" },
+        { "name": "Nordsee (Rathausstraße)", "reason": "Сетевой рыбный фастфуд — заменили на более уникальные варианты (Konnopke's, Zeit für Brot)" },
+        { "name": "Scheers Schnitzel (у East Side Gallery)", "reason": "Реально рядом с маршрутом, но обед дня 1 уже закрыт Rotes Rathaus/Burgermeister — лёгкая замена, если предпочитаете шницель бургеру" }
       ]
     },
     {
@@ -175,6 +190,9 @@
           "links": { "official": "https://www.spsg.de", "wikipedia": "https://ru.wikipedia.org/wiki/Шарлоттенбург_(дворец)" },
           "askPrompt": "Стоит ли ехать в Schloss Charlottenburg при ограниченном времени, и что смотреть в первую очередь?" },
         { "type": "transit", "mode": "U-Bahn/трамвай", "from": "Schloss Charlottenburg (или Konnopke's, если West Berlin пропущен)", "to": "Rosenfelder Straße (машина)", "minutes": 30, "note": "~15–20 мин от Пренцлауэр-Берга, если пропускаете весь West Berlin блок; если заезжали в Gedächtniskirche и/или Charlottenburg — от Шарлоттенбурга до машины ~35–40 мин, закладывайте запас перед отъездом в 16:00–17:00" }
+      ],
+      "skipped": [
+        { "name": "Mustafa's Gemüse Kebap (Mehringdamm, Кройцберг)", "reason": "Культовый дёнер, но требует отдельной поездки в Кройцберг и очереди до 1,5 часов — не вписывается по времени ни в один из дней; если готовы пожертвовать чем-то ради него, лучше всего заменить им обед у Konnopke's" }
       ]
     }
   ]
