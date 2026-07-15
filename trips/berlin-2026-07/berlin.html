@@ -1,0 +1,248 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trip Plan</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root{--bg:#fff;--fg:#1a1a1a;--card:#f5f5f7;--accent:#2563eb;--muted:#6b7280;--warn:#b45309;--ok:#15803d;--border:#e5e7eb}
+@media(prefers-color-scheme:dark){:root{--bg:#111418;--fg:#e7e9ec;--card:#1c2128;--accent:#60a5fa;--muted:#9aa3af;--warn:#fbbf24;--ok:#4ade80;--border:#2d333b}}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.5 system-ui,sans-serif;background:var(--bg);color:var(--fg)}
+header{padding:12px 20px;border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:12px;align-items:baseline}
+h1{font-size:20px;margin:0}
+h2{font-size:17px}
+#tabs button{margin-right:6px;padding:6px 14px;border:1px solid var(--border);background:var(--card);color:var(--fg);border-radius:16px;cursor:pointer;font-size:14px}
+#tabs button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+main{display:grid;grid-template-columns:minmax(340px,44%) 1fr;height:calc(100vh - 57px)}
+#itinerary{overflow-y:auto;padding:4px 16px 16px}
+#map{height:100%}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.card h3{margin:0 0 4px;font-size:16px}
+.num{display:inline-flex;width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;align-items:center;justify-content:center;font-size:12px;margin-right:6px}
+.factline{color:var(--muted);font-size:13px;margin:4px 0}
+.links a{margin-right:10px;font-size:13px;color:var(--accent)}
+.ask{margin-top:8px;font-size:13px;display:flex;gap:8px;align-items:flex-start}
+.ask button{flex:none;cursor:pointer}
+.transit{color:var(--muted);font-size:13px;margin:0 0 10px 10px;border-left:2px dotted var(--muted);padding-left:10px}
+details.alt{margin-top:8px}
+details.alt summary{cursor:pointer;font-size:13px;color:var(--accent)}
+.meal .opt{margin:4px 0;font-size:14px}
+.warn{color:var(--warn)}.ok{color:var(--ok)}
+footer{border-top:1px solid var(--border);padding:4px 20px 12px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.pin{background:var(--accent);color:#fff;border-radius:50% 50% 50% 0;transform:rotate(-45deg);width:26px;height:26px;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.4)}
+.pin span{transform:rotate(45deg);font-size:11px;font-weight:700}
+.pin.alt{background:var(--bg);color:var(--accent);border-color:var(--accent)}
+.pin.meal{background:#d97706}
+.pin.hl{outline:3px solid var(--warn)}
+@media print{#map,#tabs,button{display:none!important}main{display:block;height:auto}#itinerary{overflow:visible}}
+@media(max-width:800px){main{display:block;height:auto}#map{height:50vh}footer{display:block}}
+</style>
+</head>
+<body>
+<header><h1 id="title"></h1><nav id="tabs"></nav></header>
+<main><section id="itinerary"></section><div id="map"></div></main>
+<footer><section id="transport"></section><section id="mymaps"></section></footer>
+<script>
+const TRIP_DATA = {
+  "meta": { "city": "Берлин", "country": "Германия", "dates": "2026-07-16 – 2026-07-17", "language": "ru", "party": "пара", "pace": "насыщенный", "generatedOn": "2026-07-15" },
+  "i18n": {
+    "tripPlan": "План поездки", "askClaude": "Спросить Claude", "copied": "Скопировано",
+    "copyManually": "Скопируйте вручную:", "alternative": "альтернатива", "min": "мин",
+    "fullDayRoute": "Весь маршрут дня в Google Maps", "transport": "Транспорт",
+    "tickets": "Билеты", "apps": "Приложения", "verified": "проверено",
+    "unverified": "не проверено — уточните", "onYourPhone": "Взять с собой в телефон",
+    "mymapsStep1": "Откройте mymaps.google.com и создайте новую карту",
+    "mymapsStep2": "Импортируйте файл", "mymapsStep3": "Карта появится в приложении Google Maps",
+    "breakfast": "Завтрак", "lunch": "Обед", "dinner": "Ужин"
+  },
+  "transport": {
+    "summary": "Фридрихсхайн хорошо связан с центром: 15–20 минут на метро/S-Bahn до Митте. Машина паркуется один раз у дома и не трогается до отъезда — весь маршрут на общественном транспорте.",
+    "ticketAdvice": "Суточный билет (24h-Ticket, зона AB, ~€11,20/чел) окупается уже после 3 поездок и покрывает оба дня — купите сразу по прибытии в приложении BVG Tickets или в автомате на станции.",
+    "apps": ["BVG Tickets", "BVG Fahrinfo", "Jelbi"],
+    "facts": [
+      { "text": "Одиночный билет зоны AB — €4,00 (действует 2 часа в одном направлении)", "verified": "2026-07-15" },
+      { "text": "Суточный билет (24h-Ticket) зоны AB — €11,20 на человека", "verified": "2026-07-15" },
+      { "text": "Цены на билеты BVG повышены с 1 января 2026 (примерно на 6%) — перепроверьте актуальную цену перед покупкой", "verified": "2026-07-15" },
+      { "text": "Шарлоттенбург входит в зону AB — отдельный билет для поездки туда не нужен", "verified": "2026-07-15" },
+      { "text": "Фридрихсхайн частично входит в зоны платной парковки (Parkraumbewirtschaftung) — если ищете место на улице, уточните зону конкретно для Rosenfelder Straße на geoportal.berlin.de перед поездкой", "verified": null },
+      { "text": "Найдена информация о Christopher Street Day 16–17 июля 2026 у Бранденбургских ворот, но эта дата не совпадает с обычным графиком CSD в Берлине (как правило, конец июля) — вероятна ошибка источника. Перепроверьте на visitberlin.de: если событие всё же состоится, ждите толп и возможных перекрытий у Brandenburger Tor", "verified": null }
+    ]
+  },
+  "mymaps": { "kmlFile": "berlin.kml", "shareUrl": null },
+  "days": [
+    {
+      "label": "День 1 (16 июля, чт)",
+      "theme": "Заезд в обед — соцреалистическая архитектура у дома и исторический центр",
+      "items": [
+        { "type": "poi", "name": "Karl-Marx-Allee & Frankfurter Tor", "coords": [52.5152, 13.4548],
+          "summary": "Монументальные жилые дома в стиле сталинского ампира (1950-е) и парные башни Frankfurter Tor — начните маршрут прямо у дома.",
+          "duration": "~30 мин", "price": "бесплатно", "hours": "открыто всегда",
+          "links": { "wikipedia": "https://ru.wikipedia.org/wiki/Карл-Маркс-аллея" },
+          "askPrompt": "Расскажи об истории Karl-Marx-Allee и архитектуре сталинского ампира в Берлине" },
+        { "type": "transit", "mode": "трамвай M10", "from": "Frankfurter Tor", "to": "East Side Gallery / Warschauer Str.", "minutes": 12, "note": "или пешком ~25 мин вдоль Warschauer Straße" },
+        { "type": "poi", "name": "East Side Gallery & Oberbaumbrücke", "coords": [52.5050, 13.4396],
+          "summary": "Самый длинный сохранившийся участок Берлинской стены с росписями художников со всего мира; рядом — неоготический мост Oberbaumbrücke с видом на Шпрее.",
+          "duration": "~45 мин", "price": "бесплатно", "hours": "открыто всегда",
+          "links": { "wikipedia": "https://ru.wikipedia.org/wiki/East_Side_Gallery" },
+          "askPrompt": "Расскажи историю East Side Gallery и самые известные граффити на ней" },
+        { "type": "transit", "mode": "S-Bahn (S3/S5/S7/S9)", "from": "Warschauer Str.", "to": "Alexanderplatz", "minutes": 10, "note": null },
+        { "type": "poi", "name": "Fernsehturm & Alexanderplatz", "coords": [52.5208, 13.4094],
+          "summary": "Телебашня 1969 года — символ Восточного Берлина, рядом шумная площадь Alexanderplatz с мировыми часами.",
+          "duration": "~45 мин", "price": "смотровая площадка от €24,50 (лучше бронировать заранее онлайн); площадь и вид снаружи — бесплатно", "hours": "9:00–24:00",
+          "links": { "official": "https://tv-turm.de", "wikipedia": "https://ru.wikipedia.org/wiki/Берлинская_телебашня" },
+          "askPrompt": "Стоит ли подниматься на Fernsehturm и как купить билет дешевле?" },
+        { "type": "transit", "mode": "пешком", "from": "Alexanderplatz", "to": "Museum Island", "minutes": 12, "note": null },
+        { "type": "poi", "name": "Museum Island (Berliner Dom)", "coords": [52.5192, 13.4009],
+          "summary": "Остров музеев на Шпрее и монументальный Berliner Dom с куполом в стиле итальянского Возрождения — можно ограничиться прогулкой снаружи.",
+          "duration": "~40 мин", "price": "вход в собор €15 (если решите зайти)", "hours": "9:00–19:00 (летний режим)",
+          "links": { "official": "https://berlinerdom.de", "wikipedia": "https://ru.wikipedia.org/wiki/Берлинский_кафедральный_собор" },
+          "askPrompt": "Что посмотреть на Museum Island за ограниченное время и стоит ли заходить в Berliner Dom?" },
+        { "type": "transit", "mode": "пешком", "from": "Museum Island", "to": "Gendarmenmarkt", "minutes": 12, "note": null },
+        { "type": "poi", "name": "Unter den Linden: Bebelplatz & Gendarmenmarkt", "coords": [52.5138, 13.3928],
+          "summary": "Главный бульвар старого Берлина, площадь Bebelplatz с памятником сожжению книг и одна из красивейших площадей города Gendarmenmarkt с двумя соборами и концертным залом.",
+          "duration": "~30 мин", "price": "бесплатно", "hours": "открыто всегда",
+          "links": { "wikipedia": "https://ru.wikipedia.org/wiki/Жандарменмаркт" },
+          "askPrompt": "Расскажи об истории Gendarmenmarkt и Bebelplatz в Берлине" },
+        { "type": "transit", "mode": "пешком", "from": "Gendarmenmarkt", "to": "Brandenburger Tor", "minutes": 12, "note": null },
+        { "type": "poi", "name": "Brandenburger Tor", "coords": [52.5163, 13.3777],
+          "summary": "Главный символ Берлина и Германии: Бранденбургские ворота XVIII века, свидетель разделения и объединения города.",
+          "duration": "~20 мин", "price": "бесплатно", "hours": "открыто всегда",
+          "links": { "wikipedia": "https://ru.wikipedia.org/wiki/Бранденбургские_ворота" },
+          "askPrompt": "Расскажи историю Бранденбургских ворот, включая период Берлинской стены" },
+        { "type": "transit", "mode": "пешком", "from": "Brandenburger Tor", "to": "Denkmal für die ermordeten Juden Europas", "minutes": 3, "note": null },
+        { "type": "poi", "name": "Holocaust-Mahnmal", "coords": [52.5138, 13.3785],
+          "summary": "Мемориал памяти убитых евреев Европы — 2711 бетонных стел; поле открыто круглосуточно и бесплатно.",
+          "duration": "~25 мин", "price": "бесплатно", "hours": "поле открыто всегда; подземный центр информации вт–вс 10:00–18:00",
+          "links": { "official": "https://www.stiftung-denkmal.de", "wikipedia": "https://ru.wikipedia.org/wiki/Мемориал_памяти_убитых_евреев_Европы" },
+          "askPrompt": "Расскажи о замысле мемориала Holocaust-Mahnmal и архитекторе Питере Айзенмане" },
+        { "type": "transit", "mode": "пешком", "from": "Holocaust-Mahnmal", "to": "Potsdamer Platz", "minutes": 10, "note": null },
+        { "type": "poi", "name": "Potsdamer Platz (опционально)", "coords": [52.5096, 13.3759],
+          "summary": "Опционально, если останутся силы: современный деловой квартал на месте бывшей полосы отчуждения у стены — небоскрёбы Sony Center и контраст с историческим центром.",
+          "duration": "~30 мин", "price": "бесплатно", "hours": "открыто всегда",
+          "links": { "wikipedia": "https://ru.wikipedia.org/wiki/Потсдамская_площадь" },
+          "askPrompt": "Чем интересна современная архитектура Potsdamer Platz и что там было во времена Берлинской стены?" },
+        { "type": "transit", "mode": "U-Bahn/трамвай", "from": "Potsdamer Platz", "to": "Rosenfelder Straße", "minutes": 30, "note": "с пересадкой; выбирайте маршрут в приложении BVG" }
+      ]
+    },
+    {
+      "label": "День 2 (17 июля, пт)",
+      "theme": "Берлинская стена и Пренцлауэр-Берг — до отъезда в 16:00–17:00",
+      "items": [
+        { "type": "meal", "kind": "breakfast", "options": [
+          { "name": "Пекарня у дома (например, Zeit für Brot или Backwerk)", "coords": [52.5265, 13.4548], "cuisine": "пекарня/кофе", "price": "~€3–6 за выпечку и кофе", "note": "конкретное место не критично — берите ближайшую к дому пекарню" }
+        ] },
+        { "type": "transit", "mode": "U-Bahn (со сменой линии)", "from": "Rosenfelder Straße", "to": "Bernauer Straße", "minutes": 25, "note": "например U5 до Alexanderplatz, затем U8 до Bernauer Straße" },
+        { "type": "poi", "name": "Gedenkstätte Berliner Mauer", "coords": [52.5350, 13.3903],
+          "summary": "Мемориал Берлинской стены на Bernauer Straße: сохранившийся участок пограничной полосы, смотровая вышка и открытая экспозиция вдоль бывшей границы.",
+          "duration": "~1–1,5 ч", "price": "бесплатно", "hours": "открытая экспозиция ежедневно 8:00–22:00; центр документации вт–вс 10:00–18:00",
+          "links": { "official": "https://www.stiftung-berliner-mauer.de", "wikipedia": "https://ru.wikipedia.org/wiki/Мемориал_Берлинской_стены" },
+          "askPrompt": "Расскажи о мемориале Берлинской стены на Bernauer Straße и что там сохранилось" },
+        { "type": "transit", "mode": "пешком/трамвай M1", "from": "Bernauer Straße", "to": "Kollwitzplatz", "minutes": 20, "note": null },
+        { "type": "poi", "name": "Prenzlauer Berg: Kollwitzplatz & Wasserturm", "coords": [52.5388, 13.4192],
+          "summary": "Уютный квартал с застройкой конца XIX века: площадь Kollwitzplatz и старинная водонапорная башня Wasserturm — атмосфера богемного Берлина 1990-х.",
+          "duration": "~45 мин", "price": "бесплатно", "hours": "открыто всегда",
+          "links": { "wikipedia": "https://ru.wikipedia.org/wiki/Пренцлауэр-Берг" },
+          "askPrompt": "Что посмотреть в Пренцлауэр-Берге и почему район называют богемным?" },
+        { "type": "transit", "mode": "пешком", "from": "Kollwitzplatz", "to": "Konnopke's Imbiss", "minutes": 10, "note": null },
+        { "type": "meal", "kind": "lunch", "options": [
+          { "name": "Konnopke's Imbiss", "coords": [52.5412, 13.4114], "cuisine": "карривурст / уличная еда", "price": "~€5–7", "note": "культовая точка с 1930-х под эстакадой U-Bahn; в пятницу открыто 9:00–20:00" }
+        ] },
+        { "type": "poi", "name": "Schloss Charlottenburg (⚠ опционально, риск по времени)", "coords": [52.5208, 13.2957],
+          "summary": "⚠ Опционально: заметный крюк на запад (~35–40 мин в одну сторону от Пренцлауэр-Берга). Барочный дворец Гогенцоллернов с большим парком — впишется, только если готовы сократить запас времени перед отъездом.",
+          "duration": "~1–1,5 ч (или только парк, если поджимает время)", "price": "старые покои €12, парк — бесплатно", "hours": "дворец вт–вс 10:00–17:30; парк ежедневно 8:00 до сумерек",
+          "links": { "official": "https://www.spsg.de", "wikipedia": "https://ru.wikipedia.org/wiki/Шарлоттенбург_(дворец)" },
+          "askPrompt": "Стоит ли ехать в Schloss Charlottenburg при ограниченном времени, и что смотреть в первую очередь?" },
+        { "type": "transit", "mode": "U-Bahn/трамвай", "from": "Konnopke's Imbiss (или Schloss Charlottenburg)", "to": "Rosenfelder Straße (машина)", "minutes": 30, "note": "~15–20 мин, если не заезжали в Шарлоттенбург; если заезжали — прибавьте ~35–40 мин в одну сторону и закладывайте запас перед отъездом в 16:00–17:00" }
+      ]
+    }
+  ]
+}
+;
+(function(){
+if(!TRIP_DATA){document.body.innerHTML='<p style="padding:2em;font-family:sans-serif">No TRIP_DATA injected — this file is a template.</p>';return;}
+const D=TRIP_DATA,t=k=>(D.i18n&&D.i18n[k])||k;
+function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+document.title=D.meta.city+' — '+t('tripPlan');
+document.getElementById('title').textContent=D.meta.city+' · '+D.meta.dates;
+const map=L.map('map');
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'}).addTo(map);
+const layers=[],markersById={};
+function icon(cls,label){return L.divIcon({className:'',html:'<div class="pin '+cls+'"><span>'+label+'</span></div>',iconSize:[26,26],iconAnchor:[13,26]})}
+D.days.forEach((day,di)=>{
+  const g=L.layerGroup();let n=0;const line=[];
+  day.items.forEach((it,ii)=>{
+    if(it.type==='poi'){
+      n++;line.push(it.coords);
+      const m=L.marker(it.coords,{icon:icon('',n)}).bindPopup('<b>'+n+'. '+esc(it.name)+'</b>');
+      markersById[di+'-'+ii]=m;g.addLayer(m);
+      (it.alternatives||[]).forEach((a,ai)=>{
+        const am=L.marker(a.coords,{icon:icon('alt',n)}).bindPopup('<b>'+esc(a.name)+'</b><br>'+esc(a.when||''));
+        markersById[di+'-'+ii+'-a'+ai]=am;g.addLayer(am);
+      });
+    }
+    if(it.type==='meal')(it.options||[]).forEach(o=>{if(o.coords)g.addLayer(L.marker(o.coords,{icon:icon('meal','🍽')}).bindPopup('<b>'+esc(o.name)+'</b><br>'+esc(o.cuisine||'')))});
+  });
+  if(line.length>1)g.addLayer(L.polyline(line,{color:'#2563eb',weight:3,opacity:.7,dashArray:'6 6'}));
+  layers.push(g);
+});
+const tabs=document.getElementById('tabs'),itin=document.getElementById('itinerary');
+function gmapsDir(coords){return 'https://www.google.com/maps/dir/'+coords.map(c=>c.join(',')).join('/')}
+function poiCard(it,n,id){
+  const links=it.links||{};
+  const linkHtml=[['official',links.official],['Wikipedia',links.wikipedia],['Google Maps',links.maps||'https://www.google.com/maps/search/?api=1&query='+it.coords.join(',')]]
+    .filter(l=>l[1]).map(l=>'<a target="_blank" href="'+esc(l[1])+'">'+esc(l[0])+'</a>').join('');
+  const alts=(it.alternatives||[]).map((a,ai)=>'<details class="alt" data-mid="'+id+'-a'+ai+'"><summary>↳ '+esc(a.when||t('alternative'))+': '+esc(a.name)+'</summary><div>'+esc(a.summary||'')+'</div></details>').join('');
+  return '<div class="card" data-mid="'+id+'"><h3><span class="num">'+n+'</span>'+esc(it.name)+'</h3>'
+    +'<div class="factline">'+[it.duration,it.price,it.hours].filter(Boolean).map(esc).join(' · ')+'</div>'
+    +'<div>'+esc(it.summary||'')+'</div><div class="links">'+linkHtml+'</div>'
+    +(it.askPrompt?'<div class="ask"><button data-copy="'+esc(it.askPrompt)+'">⎘ '+esc(t('askClaude'))+'</button><span class="factline">'+esc(it.askPrompt)+'</span></div>':'')
+    +alts+'</div>';
+}
+function mealCard(it){
+  return '<div class="card meal"><h3>🍽 '+esc(t(it.kind))+'</h3>'+(it.options||[]).map(o=>'<div class="opt"><b>'+esc(o.name)+'</b> — '+[o.cuisine,o.price,o.note].filter(Boolean).map(esc).join(' · ')+'</div>').join('')+'</div>';
+}
+function show(di){
+  [...tabs.children].forEach((b,i)=>b.classList.toggle('active',i===di));
+  layers.forEach((g,i)=>{if(i===di)g.addTo(map);else map.removeLayer(g)});
+  const day=D.days[di];let n=0;const coords=[];
+  let h='<h2>'+esc(day.label)+(day.theme?' — '+esc(day.theme):'')+'</h2>';
+  day.items.forEach((it,ii)=>{
+    if(it.type==='poi'){n++;coords.push(it.coords);h+=poiCard(it,n,di+'-'+ii)}
+    else if(it.type==='meal')h+=mealCard(it);
+    else if(it.type==='transit')h+='<div class="transit">🚋 '+esc(it.mode)+' · '+esc(it.from)+' → '+esc(it.to)+' · '+esc(it.minutes)+' '+esc(t('min'))+(it.note?' · '+esc(it.note):'')+'</div>';
+  });
+  if(coords.length>1)h+='<p><a target="_blank" href="'+gmapsDir(coords)+'">📍 '+esc(t('fullDayRoute'))+'</a></p>';
+  itin.innerHTML=h;
+  const b=L.latLngBounds(coords.length?coords:[[50,14]]);
+  layers[di].eachLayer(l=>{if(l.getLatLng)b.extend(l.getLatLng())});
+  map.fitBounds(b.pad(0.2));
+}
+D.days.forEach((d,i)=>{const b=document.createElement('button');b.textContent=d.label;b.onclick=()=>show(i);tabs.appendChild(b)});
+itin.addEventListener('click',e=>{
+  const btn=e.target.closest('button[data-copy]');
+  if(btn){
+    if(navigator.clipboard)navigator.clipboard.writeText(btn.dataset.copy);
+    else window.prompt(t('copyManually'),btn.dataset.copy);
+    btn.textContent='✓ '+t('copied');setTimeout(()=>btn.textContent='⎘ '+t('askClaude'),1500);return;
+  }
+  const alt=e.target.closest('details.alt'),card=e.target.closest('[data-mid]');
+  const mid=alt?alt.dataset.mid:card&&card.dataset.mid;
+  const m=mid&&markersById[mid];
+  if(m){m.openPopup();const el=m.getElement();if(el){const p=el.querySelector('.pin');p.classList.add('hl');setTimeout(()=>p.classList.remove('hl'),1600)}}
+});
+const tp=document.getElementById('transport'),tr=D.transport||{};
+tp.innerHTML='<h2>🚇 '+esc(t('transport'))+'</h2><p>'+esc(tr.summary||'')+'</p><p><b>'+esc(t('tickets'))+':</b> '+esc(tr.ticketAdvice||'')+'</p>'
+ +(tr.apps&&tr.apps.length?'<p><b>'+esc(t('apps'))+':</b> '+tr.apps.map(esc).join(', ')+'</p>':'')
+ +(tr.facts||[]).map(f=>'<p class="factline">'+(f.verified?'<span class="ok">✓ '+esc(t('verified'))+' '+esc(f.verified)+'</span>':'<span class="warn">⚠ '+esc(t('unverified'))+'</span>')+' — '+esc(f.text)+'</p>').join('');
+const mm=document.getElementById('mymaps'),my=D.mymaps||{};
+mm.innerHTML='<h2>📱 '+esc(t('onYourPhone'))+'</h2>'+(my.shareUrl
+ ?'<iframe src="'+esc(my.shareUrl.replace('/edit','/embed'))+'" width="100%" height="220" style="border:0"></iframe>'
+ :'<ol><li>'+esc(t('mymapsStep1'))+'</li><li>'+esc(t('mymapsStep2'))+' <b>'+esc(my.kmlFile||'')+'</b></li><li>'+esc(t('mymapsStep3'))+'</li></ol>');
+show(0);
+})();
+</script>
+</body>
+</html>

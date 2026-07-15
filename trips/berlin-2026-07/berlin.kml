@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document><name>Берлин · 2026-07-16 – 2026-07-17</name>
+  <Style id="main"><IconStyle><color>ffdb6324</color></IconStyle></Style>
+  <Style id="alt"><IconStyle><color>88db6324</color></IconStyle></Style>
+  <Style id="meal"><IconStyle><color>ff0689d9</color></IconStyle></Style>
+  <Style id="route"><LineStyle><color>b3eb6325</color><width>3</width></LineStyle></Style>
+  <Folder><name>День 1 (16 июля, чт)</name>
+    <Placemark><name>1. Karl-Marx-Allee &amp; Frankfurter Tor</name><styleUrl>#main</styleUrl>
+      <description>Монументальные жилые дома в стиле сталинского ампира (1950-е) и парные башни Frankfurter Tor — начните маршрут прямо у дома.
+Длительность: ~30 мин
+Цена: бесплатно
+Часы: открыто всегда</description>
+      <Point><coordinates>13.4548,52.5152</coordinates></Point>
+    </Placemark>
+    <Placemark><name>2. East Side Gallery &amp; Oberbaumbrücke</name><styleUrl>#main</styleUrl>
+      <description>Самый длинный сохранившийся участок Берлинской стены с росписями художников со всего мира; рядом — неоготический мост Oberbaumbrücke с видом на Шпрее.
+Длительность: ~45 мин
+Цена: бесплатно
+Часы: открыто всегда</description>
+      <Point><coordinates>13.4396,52.5050</coordinates></Point>
+    </Placemark>
+    <Placemark><name>3. Fernsehturm &amp; Alexanderplatz</name><styleUrl>#main</styleUrl>
+      <description>Телебашня 1969 года — символ Восточного Берлина, рядом шумная площадь Alexanderplatz с мировыми часами.
+Длительность: ~45 мин
+Цена: смотровая площадка от €24,50 (лучше бронировать заранее онлайн); площадь и вид снаружи — бесплатно
+Часы: 9:00–24:00</description>
+      <Point><coordinates>13.4094,52.5208</coordinates></Point>
+    </Placemark>
+    <Placemark><name>4. Museum Island (Berliner Dom)</name><styleUrl>#main</styleUrl>
+      <description>Остров музеев на Шпрее и монументальный Berliner Dom с куполом в стиле итальянского Возрождения — можно ограничиться прогулкой снаружи.
+Длительность: ~40 мин
+Цена: вход в собор €15 (если решите зайти)
+Часы: 9:00–19:00 (летний режим)</description>
+      <Point><coordinates>13.4009,52.5192</coordinates></Point>
+    </Placemark>
+    <Placemark><name>5. Unter den Linden: Bebelplatz &amp; Gendarmenmarkt</name><styleUrl>#main</styleUrl>
+      <description>Главный бульвар старого Берлина, площадь Bebelplatz с памятником сожжению книг и одна из красивейших площадей города Gendarmenmarkt с двумя соборами и концертным залом.
+Длительность: ~30 мин
+Цена: бесплатно
+Часы: открыто всегда</description>
+      <Point><coordinates>13.3928,52.5138</coordinates></Point>
+    </Placemark>
+    <Placemark><name>6. Brandenburger Tor</name><styleUrl>#main</styleUrl>
+      <description>Главный символ Берлина и Германии: Бранденбургские ворота XVIII века, свидетель разделения и объединения города.
+Длительность: ~20 мин
+Цена: бесплатно
+Часы: открыто всегда</description>
+      <Point><coordinates>13.3777,52.5163</coordinates></Point>
+    </Placemark>
+    <Placemark><name>7. Holocaust-Mahnmal</name><styleUrl>#main</styleUrl>
+      <description>Мемориал памяти убитых евреев Европы — 2711 бетонных стел; поле открыто круглосуточно и бесплатно.
+Длительность: ~25 мин
+Цена: бесплатно
+Часы: поле открыто всегда; подземный центр информации вт–вс 10:00–18:00</description>
+      <Point><coordinates>13.3785,52.5138</coordinates></Point>
+    </Placemark>
+    <Placemark><name>8. Potsdamer Platz (опционально)</name><styleUrl>#main</styleUrl>
+      <description>Опционально, если останутся силы: современный деловой квартал на месте бывшей полосы отчуждения у стены — небоскрёбы Sony Center и контраст с историческим центром.
+Длительность: ~30 мин
+Цена: бесплатно
+Часы: открыто всегда</description>
+      <Point><coordinates>13.3759,52.5096</coordinates></Point>
+    </Placemark>
+    <Placemark><name>Route</name><styleUrl>#route</styleUrl>
+      <LineString><coordinates>
+        13.4548,52.5152
+        13.4396,52.5050
+        13.4094,52.5208
+        13.4009,52.5192
+        13.3928,52.5138
+        13.3777,52.5163
+        13.3785,52.5138
+        13.3759,52.5096
+      </coordinates></LineString>
+    </Placemark>
+  </Folder>
+  <Folder><name>День 2 (17 июля, пт)</name>
+    <Placemark><name>🍽 Пекарня у дома (например, Zeit für Brot или Backwerk)</name><styleUrl>#meal</styleUrl>
+      <description>конкретное место не критично — берите ближайшую к дому пекарню
+Цена: ~€3–6 за выпечку и кофе</description>
+      <Point><coordinates>13.4548,52.5265</coordinates></Point>
+    </Placemark>
+    <Placemark><name>1. Gedenkstätte Berliner Mauer</name><styleUrl>#main</styleUrl>
+      <description>Мемориал Берлинской стены на Bernauer Straße: сохранившийся участок пограничной полосы, смотровая вышка и открытая экспозиция вдоль бывшей границы.
+Длительность: ~1–1,5 ч
+Цена: бесплатно
+Часы: открытая экспозиция ежедневно 8:00–22:00; центр документации вт–вс 10:00–18:00</description>
+      <Point><coordinates>13.3903,52.5350</coordinates></Point>
+    </Placemark>
+    <Placemark><name>2. Prenzlauer Berg: Kollwitzplatz &amp; Wasserturm</name><styleUrl>#main</styleUrl>
+      <description>Уютный квартал с застройкой конца XIX века: площадь Kollwitzplatz и старинная водонапорная башня Wasserturm — атмосфера богемного Берлина 1990-х.
+Длительность: ~45 мин
+Цена: бесплатно
+Часы: открыто всегда</description>
+      <Point><coordinates>13.4192,52.5388</coordinates></Point>
+    </Placemark>
+    <Placemark><name>🍽 Konnopke's Imbiss</name><styleUrl>#meal</styleUrl>
+      <description>культовая точка с 1930-х под эстакадой U-Bahn; в пятницу открыто 9:00–20:00
+Цена: ~€5–7</description>
+      <Point><coordinates>13.4114,52.5412</coordinates></Point>
+    </Placemark>
+    <Placemark><name>3-alt. Schloss Charlottenburg (⚠ опционально, риск по времени)</name><styleUrl>#alt</styleUrl>
+      <description>⚠ Опционально: заметный крюк на запад (~35–40 мин в одну сторону от Пренцлауэр-Берга). Барочный дворец Гогенцоллернов с большим парком — впишется, только если готовы сократить запас времени перед отъездом.
+Длительность: ~1–1,5 ч (или только парк, если поджимает время)
+Цена: старые покои €12, парк — бесплатно
+Часы: дворец вт–вс 10:00–17:30; парк ежедневно 8:00 до сумерек</description>
+      <Point><coordinates>13.2957,52.5208</coordinates></Point>
+    </Placemark>
+    <Placemark><name>Route</name><styleUrl>#route</styleUrl>
+      <LineString><coordinates>
+        13.3903,52.5350
+        13.4192,52.5388
+        13.4114,52.5412
+      </coordinates></LineString>
+    </Placemark>
+  </Folder>
+</Document>
+</kml>

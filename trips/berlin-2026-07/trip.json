@@ -1,0 +1,114 @@
+{
+  "meta": { "city": "Берлин", "country": "Германия", "dates": "2026-07-16 – 2026-07-17", "language": "ru", "party": "пара", "pace": "насыщенный", "generatedOn": "2026-07-15" },
+  "i18n": {
+    "tripPlan": "План поездки", "askClaude": "Спросить Claude", "copied": "Скопировано",
+    "copyManually": "Скопируйте вручную:", "alternative": "альтернатива", "min": "мин",
+    "fullDayRoute": "Весь маршрут дня в Google Maps", "transport": "Транспорт",
+    "tickets": "Билеты", "apps": "Приложения", "verified": "проверено",
+    "unverified": "не проверено — уточните", "onYourPhone": "Взять с собой в телефон",
+    "mymapsStep1": "Откройте mymaps.google.com и создайте новую карту",
+    "mymapsStep2": "Импортируйте файл", "mymapsStep3": "Карта появится в приложении Google Maps",
+    "breakfast": "Завтрак", "lunch": "Обед", "dinner": "Ужин"
+  },
+  "transport": {
+    "summary": "Фридрихсхайн хорошо связан с центром: 15–20 минут на метро/S-Bahn до Митте. Машина паркуется один раз у дома и не трогается до отъезда — весь маршрут на общественном транспорте.",
+    "ticketAdvice": "Суточный билет (24h-Ticket, зона AB, ~€11,20/чел) окупается уже после 3 поездок и покрывает оба дня — купите сразу по прибытии в приложении BVG Tickets или в автомате на станции.",
+    "apps": ["BVG Tickets", "BVG Fahrinfo", "Jelbi"],
+    "facts": [
+      { "text": "Одиночный билет зоны AB — €4,00 (действует 2 часа в одном направлении)", "verified": "2026-07-15" },
+      { "text": "Суточный билет (24h-Ticket) зоны AB — €11,20 на человека", "verified": "2026-07-15" },
+      { "text": "Цены на билеты BVG повышены с 1 января 2026 (примерно на 6%) — перепроверьте актуальную цену перед покупкой", "verified": "2026-07-15" },
+      { "text": "Шарлоттенбург входит в зону AB — отдельный билет для поездки туда не нужен", "verified": "2026-07-15" },
+      { "text": "Фридрихсхайн частично входит в зоны платной парковки (Parkraumbewirtschaftung) — если ищете место на улице, уточните зону конкретно для Rosenfelder Straße на geoportal.berlin.de перед поездкой", "verified": null },
+      { "text": "Найдена информация о Christopher Street Day 16–17 июля 2026 у Бранденбургских ворот, но эта дата не совпадает с обычным графиком CSD в Берлине (как правило, конец июля) — вероятна ошибка источника. Перепроверьте на visitberlin.de: если событие всё же состоится, ждите толп и возможных перекрытий у Brandenburger Tor", "verified": null }
+    ]
+  },
+  "mymaps": { "kmlFile": "berlin.kml", "shareUrl": null },
+  "days": [
+    {
+      "label": "День 1 (16 июля, чт)",
+      "theme": "Заезд в обед — соцреалистическая архитектура у дома и исторический центр",
+      "items": [
+        { "type": "poi", "name": "Karl-Marx-Allee & Frankfurter Tor", "coords": [52.5152, 13.4548],
+          "summary": "Монументальные жилые дома в стиле сталинского ампира (1950-е) и парные башни Frankfurter Tor — начните маршрут прямо у дома.",
+          "duration": "~30 мин", "price": "бесплатно", "hours": "открыто всегда",
+          "links": { "wikipedia": "https://ru.wikipedia.org/wiki/Карл-Маркс-аллея" },
+          "askPrompt": "Расскажи об истории Karl-Marx-Allee и архитектуре сталинского ампира в Берлине" },
+        { "type": "transit", "mode": "трамвай M10", "from": "Frankfurter Tor", "to": "East Side Gallery / Warschauer Str.", "minutes": 12, "note": "или пешком ~25 мин вдоль Warschauer Straße" },
+        { "type": "poi", "name": "East Side Gallery & Oberbaumbrücke", "coords": [52.5050, 13.4396],
+          "summary": "Самый длинный сохранившийся участок Берлинской стены с росписями художников со всего мира; рядом — неоготический мост Oberbaumbrücke с видом на Шпрее.",
+          "duration": "~45 мин", "price": "бесплатно", "hours": "открыто всегда",
+          "links": { "wikipedia": "https://ru.wikipedia.org/wiki/East_Side_Gallery" },
+          "askPrompt": "Расскажи историю East Side Gallery и самые известные граффити на ней" },
+        { "type": "transit", "mode": "S-Bahn (S3/S5/S7/S9)", "from": "Warschauer Str.", "to": "Alexanderplatz", "minutes": 10, "note": null },
+        { "type": "poi", "name": "Fernsehturm & Alexanderplatz", "coords": [52.5208, 13.4094],
+          "summary": "Телебашня 1969 года — символ Восточного Берлина, рядом шумная площадь Alexanderplatz с мировыми часами.",
+          "duration": "~45 мин", "price": "смотровая площадка от €24,50 (лучше бронировать заранее онлайн); площадь и вид снаружи — бесплатно", "hours": "9:00–24:00",
+          "links": { "official": "https://tv-turm.de", "wikipedia": "https://ru.wikipedia.org/wiki/Берлинская_телебашня" },
+          "askPrompt": "Стоит ли подниматься на Fernsehturm и как купить билет дешевле?" },
+        { "type": "transit", "mode": "пешком", "from": "Alexanderplatz", "to": "Museum Island", "minutes": 12, "note": null },
+        { "type": "poi", "name": "Museum Island (Berliner Dom)", "coords": [52.5192, 13.4009],
+          "summary": "Остров музеев на Шпрее и монументальный Berliner Dom с куполом в стиле итальянского Возрождения — можно ограничиться прогулкой снаружи.",
+          "duration": "~40 мин", "price": "вход в собор €15 (если решите зайти)", "hours": "9:00–19:00 (летний режим)",
+          "links": { "official": "https://berlinerdom.de", "wikipedia": "https://ru.wikipedia.org/wiki/Берлинский_кафедральный_собор" },
+          "askPrompt": "Что посмотреть на Museum Island за ограниченное время и стоит ли заходить в Berliner Dom?" },
+        { "type": "transit", "mode": "пешком", "from": "Museum Island", "to": "Gendarmenmarkt", "minutes": 12, "note": null },
+        { "type": "poi", "name": "Unter den Linden: Bebelplatz & Gendarmenmarkt", "coords": [52.5138, 13.3928],
+          "summary": "Главный бульвар старого Берлина, площадь Bebelplatz с памятником сожжению книг и одна из красивейших площадей города Gendarmenmarkt с двумя соборами и концертным залом.",
+          "duration": "~30 мин", "price": "бесплатно", "hours": "открыто всегда",
+          "links": { "wikipedia": "https://ru.wikipedia.org/wiki/Жандарменмаркт" },
+          "askPrompt": "Расскажи об истории Gendarmenmarkt и Bebelplatz в Берлине" },
+        { "type": "transit", "mode": "пешком", "from": "Gendarmenmarkt", "to": "Brandenburger Tor", "minutes": 12, "note": null },
+        { "type": "poi", "name": "Brandenburger Tor", "coords": [52.5163, 13.3777],
+          "summary": "Главный символ Берлина и Германии: Бранденбургские ворота XVIII века, свидетель разделения и объединения города.",
+          "duration": "~20 мин", "price": "бесплатно", "hours": "открыто всегда",
+          "links": { "wikipedia": "https://ru.wikipedia.org/wiki/Бранденбургские_ворота" },
+          "askPrompt": "Расскажи историю Бранденбургских ворот, включая период Берлинской стены" },
+        { "type": "transit", "mode": "пешком", "from": "Brandenburger Tor", "to": "Denkmal für die ermordeten Juden Europas", "minutes": 3, "note": null },
+        { "type": "poi", "name": "Holocaust-Mahnmal", "coords": [52.5138, 13.3785],
+          "summary": "Мемориал памяти убитых евреев Европы — 2711 бетонных стел; поле открыто круглосуточно и бесплатно.",
+          "duration": "~25 мин", "price": "бесплатно", "hours": "поле открыто всегда; подземный центр информации вт–вс 10:00–18:00",
+          "links": { "official": "https://www.stiftung-denkmal.de", "wikipedia": "https://ru.wikipedia.org/wiki/Мемориал_памяти_убитых_евреев_Европы" },
+          "askPrompt": "Расскажи о замысле мемориала Holocaust-Mahnmal и архитекторе Питере Айзенмане" },
+        { "type": "transit", "mode": "пешком", "from": "Holocaust-Mahnmal", "to": "Potsdamer Platz", "minutes": 10, "note": null },
+        { "type": "poi", "name": "Potsdamer Platz (опционально)", "coords": [52.5096, 13.3759],
+          "summary": "Опционально, если останутся силы: современный деловой квартал на месте бывшей полосы отчуждения у стены — небоскрёбы Sony Center и контраст с историческим центром.",
+          "duration": "~30 мин", "price": "бесплатно", "hours": "открыто всегда",
+          "links": { "wikipedia": "https://ru.wikipedia.org/wiki/Потсдамская_площадь" },
+          "askPrompt": "Чем интересна современная архитектура Potsdamer Platz и что там было во времена Берлинской стены?" },
+        { "type": "transit", "mode": "U-Bahn/трамвай", "from": "Potsdamer Platz", "to": "Rosenfelder Straße", "minutes": 30, "note": "с пересадкой; выбирайте маршрут в приложении BVG" }
+      ]
+    },
+    {
+      "label": "День 2 (17 июля, пт)",
+      "theme": "Берлинская стена и Пренцлауэр-Берг — до отъезда в 16:00–17:00",
+      "items": [
+        { "type": "meal", "kind": "breakfast", "options": [
+          { "name": "Пекарня у дома (например, Zeit für Brot или Backwerk)", "coords": [52.5265, 13.4548], "cuisine": "пекарня/кофе", "price": "~€3–6 за выпечку и кофе", "note": "конкретное место не критично — берите ближайшую к дому пекарню" }
+        ] },
+        { "type": "transit", "mode": "U-Bahn (со сменой линии)", "from": "Rosenfelder Straße", "to": "Bernauer Straße", "minutes": 25, "note": "например U5 до Alexanderplatz, затем U8 до Bernauer Straße" },
+        { "type": "poi", "name": "Gedenkstätte Berliner Mauer", "coords": [52.5350, 13.3903],
+          "summary": "Мемориал Берлинской стены на Bernauer Straße: сохранившийся участок пограничной полосы, смотровая вышка и открытая экспозиция вдоль бывшей границы.",
+          "duration": "~1–1,5 ч", "price": "бесплатно", "hours": "открытая экспозиция ежедневно 8:00–22:00; центр документации вт–вс 10:00–18:00",
+          "links": { "official": "https://www.stiftung-berliner-mauer.de", "wikipedia": "https://ru.wikipedia.org/wiki/Мемориал_Берлинской_стены" },
+          "askPrompt": "Расскажи о мемориале Берлинской стены на Bernauer Straße и что там сохранилось" },
+        { "type": "transit", "mode": "пешком/трамвай M1", "from": "Bernauer Straße", "to": "Kollwitzplatz", "minutes": 20, "note": null },
+        { "type": "poi", "name": "Prenzlauer Berg: Kollwitzplatz & Wasserturm", "coords": [52.5388, 13.4192],
+          "summary": "Уютный квартал с застройкой конца XIX века: площадь Kollwitzplatz и старинная водонапорная башня Wasserturm — атмосфера богемного Берлина 1990-х.",
+          "duration": "~45 мин", "price": "бесплатно", "hours": "открыто всегда",
+          "links": { "wikipedia": "https://ru.wikipedia.org/wiki/Пренцлауэр-Берг" },
+          "askPrompt": "Что посмотреть в Пренцлауэр-Берге и почему район называют богемным?" },
+        { "type": "transit", "mode": "пешком", "from": "Kollwitzplatz", "to": "Konnopke's Imbiss", "minutes": 10, "note": null },
+        { "type": "meal", "kind": "lunch", "options": [
+          { "name": "Konnopke's Imbiss", "coords": [52.5412, 13.4114], "cuisine": "карривурст / уличная еда", "price": "~€5–7", "note": "культовая точка с 1930-х под эстакадой U-Bahn; в пятницу открыто 9:00–20:00" }
+        ] },
+        { "type": "poi", "name": "Schloss Charlottenburg (⚠ опционально, риск по времени)", "coords": [52.5208, 13.2957],
+          "summary": "⚠ Опционально: заметный крюк на запад (~35–40 мин в одну сторону от Пренцлауэр-Берга). Барочный дворец Гогенцоллернов с большим парком — впишется, только если готовы сократить запас времени перед отъездом.",
+          "duration": "~1–1,5 ч (или только парк, если поджимает время)", "price": "старые покои €12, парк — бесплатно", "hours": "дворец вт–вс 10:00–17:30; парк ежедневно 8:00 до сумерек",
+          "links": { "official": "https://www.spsg.de", "wikipedia": "https://ru.wikipedia.org/wiki/Шарлоттенбург_(дворец)" },
+          "askPrompt": "Стоит ли ехать в Schloss Charlottenburg при ограниченном времени, и что смотреть в первую очередь?" },
+        { "type": "transit", "mode": "U-Bahn/трамвай", "from": "Konnopke's Imbiss (или Schloss Charlottenburg)", "to": "Rosenfelder Straße (машина)", "minutes": 30, "note": "~15–20 мин, если не заезжали в Шарлоттенбург; если заезжали — прибавьте ~35–40 мин в одну сторону и закладывайте запас перед отъездом в 16:00–17:00" }
+      ]
+    }
+  ]
+}
